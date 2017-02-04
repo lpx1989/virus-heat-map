@@ -1,0 +1,126 @@
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<title>bingdu</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			body, html {
+				margin:0;
+				padding:0;
+				font-family:Arial;
+			}
+			h1 {
+				margin-bottom:10px;
+			}
+			#main {
+				position:relative;
+				width:1020px;
+				padding:20px;
+				margin:auto;
+			}
+			#heatmapArea {
+				position:relative;
+				float:left;
+				width:800px;
+				height:600px;
+				border:1px dashed black;
+			}
+			#configArea {
+				position:relative;
+				float:left;
+				width:200px;
+				padding:15px;
+				padding-top:0;
+				padding-right:0;
+			}
+			.btn {
+				margin-top:25px;
+				padding:10px 20px 10px 20px;
+				-moz-border-radius:15px;
+				-o-border-radius:15px;
+				-webkit-border-radius:15px;
+				border-radius:15px;
+				border:2px solid black;
+				cursor:pointer;
+				color:white;
+				background-color:black;
+			}
+			#gen:hover{
+				background-color:grey;
+				color:black;
+			}
+			textarea{
+				width:260px;
+				padding:10px;
+				height:200px;
+			}
+			h2{
+				margin-top:0;
+			}
+		</style>
+<script type="text/javascript" src="https://maps.google.ca/maps/api/js?sensor=false"></script>
+
+</head>
+<body>
+<div id="main">
+			<h1>The demonstration of a virus heat map</h1>
+			<br /><br />
+			<div id="heatmapArea">
+			
+			</div>
+			<div id="configArea">
+				<h2>Sidenotes</h2>
+				This is a demonstration of a virus heat map<br /><br />
+				<div id="tog" class="btn">Toggle HeatmapOverlay</div>
+			</div>
+			
+<div style="position:absolute;width:940px;top:750px;text-align:center;"><a href="https://www.facebook.com/lilsummer.guo">Xiao Guo's map</a> by <a href="https://plus.google.com/u/0/+PEIXINLIU/" target="_blank">Leo</a></div>
+
+</div>
+<script type="text/javascript" src="heatmap.js"></script>
+<script type="text/javascript" src="heatmap-gmaps.js"></script>
+<script type="text/javascript">
+
+var map;
+var heatmap; 
+
+window.onload = function(){
+
+	var myLatlng = new google.maps.LatLng(37.4821403, -95.0618336);
+	// sorry - this demo is a beta
+	// there is lots of work todo
+	// but I don't have enough time for eg redrawing on dragrelease right now
+	var myOptions = {
+	  zoom: 3,
+	  center: myLatlng,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  disableDefaultUI: false,
+	  scrollwheel: true,
+	  draggable: true,
+	  navigationControl: true,
+	  mapTypeControl: false,
+	  scaleControl: true,
+	  disableDoubleClickZoom: false
+	};
+	map = new google.maps.Map(document.getElementById("heatmapArea"), myOptions);
+	
+	heatmap = new HeatmapOverlay(map, {"radius":15, "visible":true, "opacity":60});
+	
+	var testData={
+		max: 20,
+		data: [{lat: 44.1419049, lng:-120.5380993, count: 1},{lat: 45.2183486, lng:-69.0169703, count: 2},{lat: 32.6010112, lng:-86.6807364, count: 2},{lat: 34.7519275, lng:-92.1323668, count: 1},{lat: 47.2755146, lng:-120.8506483, count: 10},{lat: 44.2126995, lng:-100.2471641, count: 4},{lat: 38.3046614, lng:-92.4395821, count: 11},{lat: 35.2145629, lng:-79.8912675, count: 1},{lat: 61.3025005, lng:-158.7750198, count: 250},{lat: 34.1662325, lng:-106.0260685, count: 9},{lat: 44.7862909, lng:-89.8267157, count: 108},{lat: 34.1682185, lng:-111.930907, count: 1},{lat: 42.755942, lng:-75.809204, count: 4},{lat: 40.1430241, lng:-74.7311156, count: 69},{lat: 46.4418595, lng:-93.3655146, count: 151},{lat: 37.2718745, lng:-119.2704153, count: 69},{lat: 39.1452509, lng:-75.4187469, count: 34},{lat: 44.947363, lng:-86.4158049, count: 1},{lat: 41.9383165, lng:-93.39108, count: 12},{lat: 32.5851062, lng:-89.8762124, count: 4},{lat: 47.4678819, lng:-100.3022655, count: 33},{lat: 39.7408263, lng:-89.503508, count: 17},{lat: 31.1693362, lng:-100.0768425, count: 30},{lat: 30.9733766, lng:-91.4306989, count: 10},{lat: 40.1903624, lng:-82.6692525, count: 81},{lat: 38.8059218, lng:-77.2684162, count: 5}]
+	};
+
+	document.getElementById("tog").onclick = function(){
+		heatmap.toggle();
+	};
+	
+	// this is important, because if you set the data set too early, the latlng/pixel projection doesn't work
+	google.maps.event.addListenerOnce(map, "idle", function(){
+		heatmap.setDataSet(testData);
+	});
+};
+
+</script>
+</body>
+</html>
